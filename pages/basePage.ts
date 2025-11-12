@@ -24,13 +24,8 @@ export class BasePage {
         }
     }
 
-    public async clickElement(locator: Locator): Promise<void> {
-        await locator.waitFor({ state: 'visible' });
-        await locator.click();
-    }
-
-   public async assertText(selector: string, expectedText: string): Promise<void> {
-        const actualText = await this.page.locator(selector).textContent();
+    public async assertText(locator: Locator, expectedText: string): Promise<void> {
+        const actualText = await locator.textContent();
         expect(actualText?.trim()).toBe(expectedText);
     }
 
