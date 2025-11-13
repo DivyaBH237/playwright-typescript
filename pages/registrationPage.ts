@@ -1,107 +1,95 @@
-import { Locator, Page } from '@playwright/test';
-import { BasePage } from './basePage';
-
-interface User {
-    firstName: string;
-    lastName: string;
-    dob: string; 
-    email: string;
-    password: string;
-    
-}
+import { expect, Locator, Page } from '@playwright/test';
+import { BasePage } from './BasePage';
+import { RegistrationDTO } from '../dto/RegistrationDto.ts';
 
 export class RegistrationPage extends BasePage {
-    readonly firstNameField: Locator;
-    readonly lastNameField: Locator;
-    readonly dobField: Locator;
-    readonly emailField: Locator;
-    readonly passwordField: Locator;
-    readonly confirmPasswordField: Locator;
-    readonly submitButton: Locator;
-    readonly signInLink: Locator;
-    readonly passwordMismatchError: Locator;
+  private firstNameField: Locator;
+  private lastNameField: Locator;
+  private dobField: Locator;
+  private emailField: Locator;
+  private passwordField: Locator;
+  private confirmPasswordField: Locator;
+  private submitButton: Locator;
+  private signInLink: Locator;
+  private passwordMismatchError: Locator;
+  private registrationLink: Locator;
 
+  constructor(page: Page) {
+    super(page);
+    this.firstNameField = page.locator('input[name="firstName"]');
+    this.lastNameField = page.locator('input[name="lastName"]');
+    this.dobField = page.locator('input[name="dateOfBirth"]');
+    this.emailField = page.locator('input[name="email"]');
+    this.passwordField = page.locator('input[name="password"]');
+    this.confirmPasswordField = page.locator('input[name="passwordConfirmation"]');
+    this.submitButton = page.locator('button[type="submit"]');
+    this.signInLink = page.locator('text=Sing in');
+    this.registrationLink = page.locator('span', { hasText: 'Registration' });
+    this.passwordMismatchError = page.locator('span:has-text("Passwords must match")');
+  }
 
-    constructor(page: Page) {
-        super(page);
+  async fillFirstName(name: string): Promise<void> {
+    await this.fillInputField(this.firstNameField, name);
+  }
 
-        this.firstNameField = page.locator('input[name="firstName"]');
-        this.lastNameField = page.locator('input[name="lastName"]');
-        this.dobField = page.locator('input[name="dateOfBirth"]');
-        this.emailField = page.locator('input[name="email"]');
-        this.passwordField = page.locator('input[name="password"]');
-        this.confirmPasswordField = page.locator('input[name="passwordConfirmation"]');
-        this.submitButton = page.locator('button[type="submit"]');
-        this.signInLink = page.locator('text=Sing in');
-        this.passwordMismatchError = page.locator('span:has-text("Passwords must match")');
-        
-    }
+  async fillLastName(name: string): Promise<void> {
+    await this.fillInputField(this.lastNameField, name);
+  }
 
-    public async fillFirstName(name: string): Promise<void> {
-        await this.fillInputField(this.firstNameField, name);
-    }
+  async fillDOB(dob: string): Promise<void> {
+    await this.dobField.click();
+    await this.fillInputField(this.dobField, dob);
+  }
 
-    public async fillLastName(name: string): Promise<void> {
-        await this.fillInputField(this.lastNameField, name);
-    }
-
-    public async fillDOB(dob: string): Promise<void> {
-        await this.dobField.click();
-        await this.fillInputField(this.dobField, dob);
-        await this.dobField.click();
-       
-        
-       
-}
-     public async fillEmail(): Promise<void> {
-    const randomNumber = Math.floor(Math.random() * 1000);
-    const paddedNumber = randomNumber.toString().padStart(3, '0');
-    const email = `john${paddedNumber}@example.com`;
-
+  async fillEmail(): Promise<string> {
+    const email = `john${Math.floor(Math.random() * 10000)}@example.com`;
     await this.fillInputField(this.emailField, email);
-    await this.passwordField.scrollIntoViewIfNeeded();
+    return email;
+  }
 
-    console.log('Generated email:', email); 
-}
+  async fillPassword(password: string): Promise<void> {
+    await this.fillInputField(this.passwordField, password);
+    await this.fillInputField(this.confirmPasswordField, password);
+  }
 
-    public async fillPassword(password: string): Promise<void> {
-        await this.fillInputField(this.passwordField, password);
-        await this.fillInputField(this.confirmPasswordField, password);
-    }
+  async fillRegistrationForm(user: RegistrationDTO): Promise<string> {
+    await this.fillFirstName(user.firstName);
+    await this.fillLastName(user.lastName);
+    await this.fillDOB(user.dob);
+    const email = await this.fillEmail();
+    await this.fillPassword(user.password);
+    return email;
+  }
 
-    public async fillRegistrationForm(user: User): Promise<void> {
-        await this.fillFirstName(user.firstName);
-        await this.fillLastName(user.lastName);
-        await this.fillDOB(user.dob);
-        await this.fillEmail();
-        await this.fillPassword(user.password);
-    }
+  async clickSubmit(): Promise<void> {
+    await this.closeDatePickerIfOpen();
+    await this.submitButton.click();
+  }
 
-    public async clickSubmit(): Promise<void> {
-        await this.closeDatePickerIfOpen();
-        await this.submitButton.click();
-    }
+  async clickSignIn(): Promise<void> {
+    await this.signInLink.click();
+  }
 
-    public async clickSignIn(): Promise<void> {
-        await this.signInLink.click();
-    }
+  async expectPasswordMismatchError(): Promise<void> {
+    await expect(this.passwordMismatchError).toBeVisible();
+  }
 
-    public async checkPasswordMismatchError(): Promise<void> {
-       await this.assertText(this.passwordMismatchError, 'Passwords must match');
+  async expectSignInLinkVisible(): Promise<void> {
+    await expect(this.signInLink).toBeVisible();
+  }
 
-    }
+  async isSubmitEnabled(): Promise<boolean> {
+    return this.submitButton.isEnabled();
+  }
 
-    public async isSubmitEnabled(): Promise<boolean> {
-        return await this.submitButton.isEnabled();
-    }
-
-   public async closeDatePickerIfOpen(): Promise<void> {
+  private async closeDatePickerIfOpen(): Promise<void> {
     const datepicker = this.page.locator('.react-datepicker__header');
     if (await datepicker.isVisible()) {
-        await this.page.mouse.click(0, 0);
-        await this.page.waitForTimeout(1000);
+      await this.page.mouse.click(0, 0);
     }
+  }
+  async expectRegistrationLinkVisible(): Promise<void> {
+  await expect(this.registrationLink).toBeVisible();
 }
-
 
 }
