@@ -44,7 +44,7 @@ test.describe('Registration Tests', () => {
             await registrationPage.fillFirstName('A'.repeat(255));
             await fillCommonFields();
             await registrationPage.clickSubmit();
-            await expect(registrationPage.page).toHaveURL('https://qa-course-01.andersenlab.com/login');
+            await expect(registrationPage.page).toHaveURL('https://qa-course-01.andersenlab.com/login',({timeout:3000}));
         });
 
         test('Min length first name (1 character)', async () => {
@@ -76,7 +76,7 @@ test.describe('Registration Tests', () => {
             await registrationPage.fillFirstName('D i v y a');
             await fillCommonFields();
             await registrationPage.clickSubmit();
-            await expect(registrationPage.page).toHaveURL('https://qa-course-01.andersenlab.com/login');
+            await expect(registrationPage.page).toHaveURL('https://qa-course-01.andersenlab.com/login',{timeout:3000});
         });
     });
 
