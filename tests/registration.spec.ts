@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import { RegistrationPage } from '../pages/registrationPage';
 
 test.describe('Registration Tests', () => {
@@ -29,7 +29,11 @@ test.describe('Registration Tests', () => {
     });
 
     test.describe('First Name Field Validations', () => {
-        test.beforeEach(async () => {
+        let registrationPage: RegistrationPage;
+        
+        
+        test.beforeEach(async ({page}) => {
+             registrationPage = new RegistrationPage(page); 
             await registrationPage.navigate('https://qa-course-01.andersenlab.com/registration');
         });
 
