@@ -1,18 +1,18 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { BasePage } from './basePage.ts';
 import { RegistrationDTO } from '../dto/RegistrationDto.ts';
 
 export class RegistrationPage extends BasePage {
-  private firstNameField: Locator;
-  private lastNameField: Locator;
-  private dobField: Locator;
-  private emailField: Locator;
-  private passwordField: Locator;
-  private confirmPasswordField: Locator;
-  private submitButton: Locator;
-  private signInLink: Locator;
-  private passwordMismatchError: Locator;
-  private registrationLink: Locator;
+  readonly firstNameField: Locator;
+  readonly lastNameField: Locator;
+  readonly dobField: Locator;
+  readonly emailField: Locator;
+  readonly passwordField: Locator;
+  readonly confirmPasswordField: Locator;
+  readonly submitButton: Locator;
+  readonly signInLink: Locator;
+  readonly passwordMismatchError: Locator;
+  readonly registrationLink: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -91,5 +91,11 @@ export class RegistrationPage extends BasePage {
   async expectRegistrationLinkVisible(): Promise<void> {
   await expect(this.registrationLink).toBeVisible();
 }
+  async fillCommonFields(): Promise<void> {
+    await this.fillLastName('Test');
+    await this.fillDOB('01/May/1990');
+    await this.fillEmail();
+    await this.fillPassword('Password123!');
+  }
 
 }
