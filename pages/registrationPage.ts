@@ -91,5 +91,11 @@ export class RegistrationPage extends BasePage {
   async expectRegistrationLinkVisible(): Promise<void> {
   await expect(this.registrationLink).toBeVisible();
 }
+  async fillCommonFields(): Promise<void> {
+    await this.fillLastName('Test');
+    await this.fillDOB('01/May/1990');
+    await this.fillEmail();
+    await this.fillPassword('Password123!');
+  }
 
 }

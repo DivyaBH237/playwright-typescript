@@ -3,29 +3,29 @@ import { RegistrationPage } from '../pages/registrationPage';
 import { SignInPage } from '../pages/signInPage';
 import { UserProfilePage } from '../pages/userProfilePage';
 
-
-export const test = base.extend<{
+type MyFixtures = {
   registrationPage: RegistrationPage;
   signInPage: SignInPage;
   userProfilePage: UserProfilePage;
-}>({
-  registrationPage: async ({ page }, use) => {
+};
+
+export const test = base.extend<MyFixtures>({
+    
+    registrationPage: async ({ page }, use) => {
     const registrationPage = new RegistrationPage(page);
-    await registrationPage.navigate('/registration'); 
     await use(registrationPage);
-  },
+    },
 
   signInPage: async ({ page }, use) => {
     const signInPage = new SignInPage(page);
-    await signInPage.navigate('/login');
     await use(signInPage);
-  },
+    },
 
   userProfilePage: async ({ page }, use) => {
     const userProfilePage = new UserProfilePage(page);
     await use(userProfilePage);
-  },
+  }
 });
-
-export { expect };
+  
+   export { expect };
 

@@ -1,11 +1,16 @@
-import { test, expect } from '../fixtures/fixtures'; // use your custom fixture
+import { test, expect } from '../fixtures/fixtures';
 import { RegistrationDTO } from '../dto/RegistrationDto.ts';
+import { URLs } from '../constants/urls.ts';
 
 test.describe('Registration Tests', () => {
+  test.beforeEach(async ({ registrationPage }) => {
+    await registrationPage.navigate(URLs.Registration);
+  });
 
   test('[AQAPRACT-507] Availability of links Register/sign in in sign in page', async ({ registrationPage }) => {
+    await registrationPage.navigate(URLs.Registration);
     await registrationPage.expectSignInLinkVisible();
-    await registrationPage.navigate('/login'); 
+    await registrationPage.navigate(URLs.Login); 
     await registrationPage.expectRegistrationLinkVisible();
   });
 
@@ -20,52 +25,44 @@ test.describe('Registration Tests', () => {
 
     await registrationPage.fillRegistrationForm(newUser);
     await registrationPage.clickSubmit();
-
-    await registrationPage.page.waitForURL('/login');
+    await registrationPage.page.waitForURL(URLs.Login);
   });
 
   test.describe('First Name Field Validations', () => {
-    const fillCommonFields = async (registrationPage: any) => {
-      await registrationPage.fillLastName('Test');
-      await registrationPage.fillDOB('01/May/1990');
-      await registrationPage.fillEmail();
-      await registrationPage.fillPassword('Password123!');
-    };
-
+    
     test('[AQAPRACT-514] Max length first name (255 characters)', async ({ registrationPage }) => {
       await registrationPage.fillFirstName('A'.repeat(255));
-      await fillCommonFields(registrationPage);
+      await registrationPage.fillCommonFields();
       await registrationPage.clickSubmit();
-      await registrationPage.page.waitForURL('/login');
+      await registrationPage.page.waitForURL(URLs.Login);
     });
 
     test('[AQAPRACT-515] Min length first name (1 character)', async ({ registrationPage }) => {
       await registrationPage.fillFirstName('A');
-      await fillCommonFields(registrationPage);
+      await registrationPage.fillCommonFields();
       await registrationPage.clickSubmit();
-      await registrationPage.page.waitForURL('/login');
+      await registrationPage.page.waitForURL(URLs.Login);
     });
 
     test('[AQAPRACT-516] First name exceeding max length (256 characters)', async ({ registrationPage }) => {
       await registrationPage.fillFirstName('A'.repeat(256));
-      await fillCommonFields(registrationPage);
+      await registrationPage.fillCommonFields();
       await registrationPage.clickSubmit();
       await expect(registrationPage.page).toHaveURL(/registration/);
     });
 
     test('[AQAPRACT-517] Empty first name', async ({ registrationPage }) => {
       await registrationPage.fillFirstName('');
-      await fillCommonFields(registrationPage);
+      await registrationPage.fillCommonFields();
       const isEnabled = await registrationPage.isSubmitEnabled();
       expect(isEnabled).toBeFalsy();
     });
 
     test('[AQAPRACT-518] First name with spaces', async ({ registrationPage }) => {
       await registrationPage.fillFirstName('D i v y a');
-      await fillCommonFields(registrationPage);
+      await registrationPage.fillCommonFields();
       await registrationPage.clickSubmit();
-      await registrationPage.page.waitForURL('/login');
+      await registrationPage.page.waitForURL(URLs.Login);
     });
   });
-
 });

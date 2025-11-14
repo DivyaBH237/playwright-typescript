@@ -37,7 +37,7 @@ export class UserProfilePage extends BasePage{
         this.expandButton = page.locator('img[alt="Expand"]');
     }
 
-    async checkAllElementsPresent() {
+    public async checkAllElementsPresent() :Promise<void> {
     await expect(this.userProfileName).toBeVisible();
     await expect(this.editButton).toBeVisible();
     await expect(this.positionValue).toBeVisible();
@@ -50,7 +50,7 @@ export class UserProfilePage extends BasePage{
     await expect(this.signOutButton).toBeVisible();
     }
 
-    async checkFieldValue(fieldName: 'Profile Name' | 'Position' | 'Technologies' | 'Email' | 'DOB', expectedValue: string) {
+    public async checkFieldValue(fieldName: 'Profile Name' | 'Position' | 'Technologies' | 'Email' | 'DOB', expectedValue: string): Promise<void> {
     let locator: Locator;
 
     switch (fieldName) {
