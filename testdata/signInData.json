@@ -1,0 +1,13 @@
+{
+  
+  "validEmail": "john.doe561@example.com",
+  "invalidEmail": "wrong@example.com",
+  "validPassword": "Divyabh@237",
+  "invalidPassword": "WrongPassword!",
+  "invalidEmailFormat":"john.doe561@example.",
+  "emptyEmail":"",
+  "emptyPassword": "",
+  "shortPassword": "12345",
+  "longPassword": "12345678901234567890123"
+  
+}

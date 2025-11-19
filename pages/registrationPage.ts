@@ -1,6 +1,6 @@
-import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from './basePage.ts';
-import { RegistrationDTO } from '../dto/RegistrationDto.ts';
+import { expect, Locator, Page } from "@playwright/test";
+import { BasePage } from "./basePage";
+import { RegistrationDTO } from "../dto/RegistrationDto";
 
 export class RegistrationPage extends BasePage {
   readonly firstNameField: Locator;
@@ -21,11 +21,15 @@ export class RegistrationPage extends BasePage {
     this.dobField = page.locator('input[name="dateOfBirth"]');
     this.emailField = page.locator('input[name="email"]');
     this.passwordField = page.locator('input[name="password"]');
-    this.confirmPasswordField = page.locator('input[name="passwordConfirmation"]');
+    this.confirmPasswordField = page.locator(
+      'input[name="passwordConfirmation"]'
+    );
     this.submitButton = page.locator('button[type="submit"]');
-    this.signInLink = page.locator('text=Sing in');
-    this.registrationLink = page.locator('span', { hasText: 'Registration' });
-    this.passwordMismatchError = page.locator('span:has-text("Passwords must match")');
+    this.signInLink = page.locator("text=Sing in");
+    this.registrationLink = page.locator("span", { hasText: "Registration" });
+    this.passwordMismatchError = page.locator(
+      'span:has-text("Passwords must match")'
+    );
   }
 
   async fillFirstName(name: string): Promise<void> {
@@ -83,19 +87,20 @@ export class RegistrationPage extends BasePage {
   }
 
   private async closeDatePickerIfOpen(): Promise<void> {
-    const datepicker = this.page.locator('.react-datepicker__header');
+    const datepicker = this.page.locator(".react-datepicker__header");
     if (await datepicker.isVisible()) {
       await this.page.mouse.click(0, 0);
     }
   }
+
   async expectRegistrationLinkVisible(): Promise<void> {
-  await expect(this.registrationLink).toBeVisible();
-}
-  async fillCommonFields(): Promise<void> {
-    await this.fillLastName('Test');
-    await this.fillDOB('01/May/1990');
-    await this.fillEmail();
-    await this.fillPassword('Password123!');
+    await expect(this.registrationLink).toBeVisible();
   }
 
+  async fillCommonFields(): Promise<void> {
+    await this.fillLastName("Test");
+    await this.fillDOB("01/May/1990");
+    await this.fillEmail();
+    await this.fillPassword("Password123!");
+  }
 }
