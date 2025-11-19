@@ -20,7 +20,7 @@ jobs:
         run: npx playwright install chromium
 
       - name: Run Playwright tests
-        run: npx playwright test --reporter=html,allure-playwright
+        run: npx playwright test
         continue-on-error: true
 
       - name: Install Allure CLI
