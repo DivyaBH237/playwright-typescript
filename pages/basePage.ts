@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from "@playwright/test";
 
 export class BasePage {
   readonly page: Page;
@@ -12,10 +12,13 @@ export class BasePage {
   }
 
   private removeSpaces(value: string): string {
-    return value.replace(/\s+/g, '');
+    return value.replace(/\s+/g, "");
   }
 
-  public async fillInputField(locator: Locator, expectedValue: string): Promise<void> {
+  public async fillInputField(
+    locator: Locator,
+    expectedValue: string
+  ): Promise<void> {
     const currentValue = await locator.inputValue();
     if (currentValue !== expectedValue) {
       await locator.fill(expectedValue);
@@ -25,13 +28,18 @@ export class BasePage {
     }
   }
 
-  public async assertText(locator: Locator, expectedText: string): Promise<void> {
+  public async assertText(
+    locator: Locator,
+    expectedText: string
+  ): Promise<void> {
     const actualText = (await locator.textContent())?.trim();
     expect(actualText).toBe(expectedText);
   }
 
-  
-  public async waitForVisible(locator: Locator, timeout = 10000): Promise<void> {
-    await locator.waitFor({ state: 'visible', timeout });
+  public async waitForVisible(
+    locator: Locator,
+    timeout = 10000
+  ): Promise<void> {
+    await locator.waitFor({ state: "visible", timeout });
   }
 }
