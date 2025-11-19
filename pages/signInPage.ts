@@ -57,10 +57,10 @@ export class SignInPage extends BasePage {
   }
 
   async requiredError(): Promise<void> {
-    const count = await this.errorMessage.count();
+    const count = await this.requiredErrorMessage.count();
     for (let i = 0; i < count; i++) {
-      await expect(this.errorMessage.nth(i)).toBeVisible();
-      await expect(this.errorMessage.nth(i)).toHaveText("Required");
+      await expect(this.requiredErrorMessage.nth(i)).toBeVisible();
+      await expect(this.requiredErrorMessage.nth(i)).toHaveText("Required");
       await expect(this.emailField).toHaveCSS(
         CSS_COLORS.BORDER_COLOR,
         CSS_COLORS.ERROR_BORDER
