@@ -1,6 +1,7 @@
 import { test, expect } from "../fixtures/fixtures";
 import { RegistrationDTO } from "../dto/RegistrationDto";
 import { URLs } from "../constants/urls";
+import firstNameData from "../testdata/firstNameData.json";
 
 test.describe("Registration Tests", () => {
   test.beforeEach(async ({ registrationPage }) => {
@@ -36,7 +37,7 @@ test.describe("Registration Tests", () => {
     test("[AQAPRACT-514] Max length first name (255 characters)", async ({
       registrationPage,
     }) => {
-      await registrationPage.fillFirstName("A".repeat(255));
+      await registrationPage.fillFirstName(firstNameData.firstNameMaxLength);
       await registrationPage.fillCommonFields();
       await registrationPage.clickSubmit();
       await registrationPage.page.waitForURL(URLs.Login);
@@ -45,7 +46,7 @@ test.describe("Registration Tests", () => {
     test("[AQAPRACT-515] Min length first name (1 character)", async ({
       registrationPage,
     }) => {
-      await registrationPage.fillFirstName("A");
+      await registrationPage.fillFirstName(firstNameData.firstNameMinLength);
       await registrationPage.fillCommonFields();
       await registrationPage.clickSubmit();
       await registrationPage.page.waitForURL(URLs.Login);
@@ -54,14 +55,16 @@ test.describe("Registration Tests", () => {
     test("[AQAPRACT-516] First name exceeding max length (256 characters)", async ({
       registrationPage,
     }) => {
-      await registrationPage.fillFirstName("A".repeat(256));
+      await registrationPage.fillFirstName(
+        firstNameData.firstNameMaxplusLength
+      );
       await registrationPage.fillCommonFields();
       await registrationPage.clickSubmit();
       await expect(registrationPage.page).toHaveURL(/registration/);
     });
 
     test("[AQAPRACT-517] Empty first name", async ({ registrationPage }) => {
-      await registrationPage.fillFirstName("");
+      await registrationPage.fillFirstName(firstNameData.firstNameEmpty);
       await registrationPage.fillCommonFields();
       const isEnabled = await registrationPage.isSubmitEnabled();
       expect(isEnabled).toBeFalsy();
@@ -70,7 +73,7 @@ test.describe("Registration Tests", () => {
     test("[AQAPRACT-518] First name with spaces", async ({
       registrationPage,
     }) => {
-      await registrationPage.fillFirstName("D i v y a");
+      await registrationPage.fillFirstName(firstNameData.firstNameWithSpace);
       await registrationPage.fillCommonFields();
       await registrationPage.clickSubmit();
       await registrationPage.page.waitForURL(URLs.Login);

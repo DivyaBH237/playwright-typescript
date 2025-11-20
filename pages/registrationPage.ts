@@ -24,12 +24,10 @@ export class RegistrationPage extends BasePage {
     this.confirmPasswordField = page.locator(
       'input[name="passwordConfirmation"]'
     );
-    this.submitButton = page.locator('button[type="submit"]');
-    this.signInLink = page.locator("text=Sing in");
-    this.registrationLink = page.locator("span", { hasText: "Registration" });
-    this.passwordMismatchError = page.locator(
-      'span:has-text("Passwords must match")'
-    );
+    this.submitButton = page.getByRole("button", { name: "Submit" });
+    this.signInLink = page.getByText("Sing in");
+    this.registrationLink = page.getByText("Registration");
+    this.passwordMismatchError = page.getByText("Passwords must match");
   }
 
   async fillFirstName(name: string): Promise<void> {

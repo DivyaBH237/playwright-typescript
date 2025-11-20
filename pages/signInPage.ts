@@ -17,12 +17,12 @@ export class SignInPage extends BasePage {
     this.emailField = page.locator('input[name="email"]');
     this.passwordField = page.locator('input[name="password"]');
     this.signInButton = page.locator('button:has-text("Sign in")');
-    this.errorMessage = page.locator("text=Email or password is not valid");
-    this.invalidEmailAddress = page.locator("text=Invalid email address");
-    this.requiredErrorMessage = page.locator("text=Required");
-    this.passwordErrorLocator = page
-      .locator("text=Maximum 20 characters")
-      .or(page.locator("text=Minimum 8 characters"));
+    this.errorMessage = page.getByText("Email or password is not valid");
+    this.invalidEmailAddress = page.getByText("Invalid email address");
+    this.requiredErrorMessage = page.getByText("Required");
+    this.passwordErrorLocator = page.getByText(
+      /Maximum 20 characters|Minimum 8 characters/
+    );
   }
 
   async fillEmail(email: string): Promise<void> {
@@ -69,7 +69,7 @@ export class SignInPage extends BasePage {
   }
 
   async validatePasswordError(expectedText: string): Promise<void> {
-    await this.page.locator('input[name="email"]').click();
+    await this.emailField.click();
     await expect(this.passwordErrorLocator).toHaveText(expectedText);
   }
 
