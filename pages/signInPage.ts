@@ -69,7 +69,7 @@ export class SignInPage extends BasePage {
   }
 
   async validatePasswordError(expectedText: string): Promise<void> {
-    await this.page.locator('input[name="email"]').click();
+    await this.emailField.click();
     await expect(this.passwordErrorLocator).toHaveText(expectedText);
   }
 

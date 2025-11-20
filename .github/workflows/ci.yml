@@ -45,3 +45,10 @@ jobs:
           name: allure-results
           path: allure-results/
           retention-days: 30
+
+      - name: Publish Allure Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
